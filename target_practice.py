@@ -10,7 +10,11 @@ displayInfo = pygame.display.Info()
 #setting window size to be user's display resolution
 window = pygame.display.set_mode([displayInfo.current_w, displayInfo.current_h])
 
+#setting score variable
 score = 0
+
+#target recentering
+back_to_center = True
 
 #function to render the score of our user at top of window
 font_name = pygame.font.match_font('arial')
@@ -38,19 +42,26 @@ while running:
     #sets background color to be white
     window.fill((200,200,200))
 
+    #draws/renders the user's current score
     draw_score(window, str(score), 40, displayInfo.current_w/2, 10)
-
-    #sets random x (within 720 pixels) coordinate for circle location
-    randX = random.randint(280, displayInfo.current_w- 280)
-
-    #sets random y (within 480 pixels) coordinate for circle location
-    randY = random.randint(120, displayInfo.current_h - 120)
 
     #sets random radius
     randR = random.randint(25, 75)
 
+    if back_to_center:
+        x_coord = displayInfo.current_w / 2
+        y_coord = displayInfo.current_h / 2
+        back_to_center = False
+    else:
+        #sets random x (within 720 pixels) coordinate for circle location
+        x_coord = random.randint(280, displayInfo.current_w- 280)
+        #sets random y (within 480 pixels) coordinate for circle location
+        y_coord = random.randint(120, displayInfo.current_h - 120)
+        back_to_center = True
+
+
     #draws our target on window
-    target = pygame.draw.circle(window, (0, 168, 0), (displayInfo.current_w - randX, displayInfo.current_h - randY), randR)
+    target = pygame.draw.circle(window, (0, 168, 0), (displayInfo.current_w - x_coord, displayInfo.current_h - y_coord), randR)
 
     #updates display on window
     pygame.display.flip()
