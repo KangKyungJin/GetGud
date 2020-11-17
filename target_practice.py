@@ -10,6 +10,17 @@ displayInfo = pygame.display.Info()
 #setting window size to be user's display resolution
 window = pygame.display.set_mode([displayInfo.current_w, displayInfo.current_h])
 
+score = 0
+
+#function to render the score of our user at top of window
+font_name = pygame.font.match_font('arial')
+def draw_score(surf, text, size, x, y):
+    font = pygame.font.Font(font_name, size)
+    text_surface = font.render(text, True, (0,0,0))
+    text_rect = text_surface.get_rect()
+    text_rect.midtop = (x,y)
+    surf.blit(text_surface, text_rect)
+
 #runs till exited
 running = True
 while running:
@@ -22,10 +33,12 @@ while running:
             x, y = event.pos
 
             if target.collidepoint(x, y):
-                print('clicked target')
+                score += 1
 
     #sets background color to be white
     window.fill((200,200,200))
+
+    draw_score(window, str(score), 40, displayInfo.current_w/2, 10)
 
     #sets random x (within 720 pixels) coordinate for circle location
     randX = random.randint(280, displayInfo.current_w- 280)
