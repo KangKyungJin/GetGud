@@ -35,6 +35,10 @@ def draw_score(surf, text, size, x, y):
 clock = pygame.time.get_ticks()
 print('testing clock')
 print(clock)
+
+target_hit = False
+draw_new_target = True
+
 #runs till exited
 running = True
 while running:
@@ -47,11 +51,12 @@ while running:
             x, y = event.pos
             if target.collidepoint(x, y):
                 print('hit!')
-                score += 1
+                score += 100
                 curr_radius *= 0.85
+                target_hit = True
             else:
                 print('miss!')
-                score += 0.5
+                score += 50
                 curr_radius *= 1.15
 
     #clock set for 30 second games, ends program and prints score
@@ -66,24 +71,28 @@ while running:
     #draws/renders the user's current score
     draw_score(window, str(score), 40, displayInfo.current_w/2, 10)
 
-    if back_to_center:
-        x_coord = displayInfo.current_w / 2
-        y_coord = displayInfo.current_h / 2
-        back_to_center = False
-    else:
-        #sets random x (within 720 pixels) coordinate for circle location
-        x_coord = random.randint(280, displayInfo.current_w- 280)
-        #sets random y (within 480 pixels) coordinate for circle location
-        y_coord = random.randint(120, displayInfo.current_h - 120)
-        back_to_center = True
+    #if target was hit, set draw_new_target to true so that a new target will be drawn.
+    if target_hit:
+        target_hit = False
+        draw_new_target = True
 
-    #draws our target on window
-    target = pygame.draw.circle(window, dark_green, (displayInfo.current_w - x_coord, displayInfo.current_h - y_coord), curr_radius)
-
-    #updates display on window
-    pygame.display.flip()
-
-    pygame.time.delay(750)
+    #if draw_new_target = true, draw the new target
+    if draw_new_target:
+        if back_to_center:
+            x_coord = displayInfo.current_w / 2
+            y_coord = displayInfo.current_h / 2
+            back_to_center = False
+        else:
+            #sets random x (within 720 pixels) coordinate for circle location
+            x_coord = random.randint(280, displayInfo.current_w- 280)
+            #sets random y (within 480 pixels) coordinate for circle location
+            y_coord = random.randint(120, displayInfo.current_h - 120)
+            back_to_center = True
+        #draws our target on window
+        target = pygame.draw.circle(window, dark_green, (displayInfo.current_w - x_coord, displayInfo.current_h - y_coord), curr_radius)
+        draw_new_target = False
+        #updates display on window
+        pygame.display.update()
 
 pygame.quit()
 
