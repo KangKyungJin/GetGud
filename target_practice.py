@@ -16,6 +16,12 @@ score = 0
 #target recentering
 back_to_center = True
 
+#set color of targets
+dark_green = (0, 168, 0)
+
+#set starting radius
+curr_radius = 65
+
 #function to render the score of our user at top of window
 font_name = pygame.font.match_font('arial')
 def draw_score(surf, text, size, x, y):
@@ -25,6 +31,10 @@ def draw_score(surf, text, size, x, y):
     text_rect.midtop = (x,y)
     surf.blit(text_surface, text_rect)
 
+#clock
+clock = pygame.time.get_ticks()
+print('testing clock')
+print(clock)
 #runs till exited
 running = True
 while running:
@@ -37,16 +47,25 @@ while running:
             x, y = event.pos
 
             if target.collidepoint(x, y):
+                print('hit!')
                 score += 1
+                curr_radius *= 0.85
+            else:
+                print('miss!')
+                score += 0.5
+                curr_radius *= 1.15
 
-    #sets background color to be white
+    #clock set for 30 second games, ends program and prints score
+    seconds=(pygame.time.get_ticks()-clock)/1000
+    if seconds >= 30:
+        print(f"Your score was: {score}! Good job!")
+        break
+
+    #sets background color to be grey
     window.fill((200,200,200))
 
     #draws/renders the user's current score
     draw_score(window, str(score), 40, displayInfo.current_w/2, 10)
-
-    #sets random radius
-    randR = random.randint(25, 75)
 
     if back_to_center:
         x_coord = displayInfo.current_w / 2
@@ -61,12 +80,12 @@ while running:
 
 
     #draws our target on window
-    target = pygame.draw.circle(window, (0, 168, 0), (displayInfo.current_w - x_coord, displayInfo.current_h - y_coord), randR)
+    target = pygame.draw.circle(window, dark_green, (displayInfo.current_w - x_coord, displayInfo.current_h - y_coord), curr_radius)
 
     #updates display on window
     pygame.display.flip()
 
-    pygame.time.wait(750)
+    pygame.time.delay(750)
 
 pygame.quit()
 
