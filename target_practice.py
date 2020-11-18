@@ -35,7 +35,6 @@ while running:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             x, y = event.pos
-
             if target.collidepoint(x, y):
                 score += 1
 
@@ -58,7 +57,6 @@ while running:
         #sets random y (within 480 pixels) coordinate for circle location
         y_coord = random.randint(120, displayInfo.current_h - 120)
         back_to_center = True
-
 
     #draws our target on window
     target = pygame.draw.circle(window, (0, 168, 0), (displayInfo.current_w - x_coord, displayInfo.current_h - y_coord), randR)
